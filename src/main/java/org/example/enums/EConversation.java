@@ -1,0 +1,11 @@
+package org.example.enums;
+
+public enum EConversation {
+    VOLUNTEER_REGISTER,
+    PARENT_REGISTER,
+    CHECK_CHILD_DOCUMENT,
+    CHECK_VOLUNTEER_PHOTO,
+    CHANGE_CHILD_DOCUMENT,
+    CHANGE_VOLUNTEER_PHOTO,
+    SEND_BOT_MESSAGE,
+}
