@@ -11,7 +11,7 @@ FROM openjdk:17
 
 WORKDIR /app
 
-COPY --from=build /app/target/voluntersBot-1.0-SNAPSHOT.jar app.jar
+COPY --from=build /app/target/volunteersBot-1.0-SNAPSHOT.jar app.jar
 
 EXPOSE 8080
 
