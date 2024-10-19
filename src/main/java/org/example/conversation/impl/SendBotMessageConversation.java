@@ -12,7 +12,7 @@ import java.util.Map;
 @Component
 public class SendBotMessageConversation extends AConversation {
     private static final EConversationStep START_STEP = EConversationStep.BOT_MESSAGE_TEXT_INPUT;
-    private static final String FINISH_MESSAGE = "Проверка документа завершена";
+    private static final String FINISH_MESSAGE = "Сообщение отправлено";
 
     public SendBotMessageConversation() {
         super(completeStepGraph(), START_STEP, FINISH_MESSAGE);

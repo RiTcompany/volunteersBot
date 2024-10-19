@@ -99,8 +99,8 @@ public class SendBotMessageChoiceStep extends ChoiceStep {
                 .setText(botMessage.getText())
                 .setInlineKeyBoard(keyboardMapper.keyboardDto(chatHash, collectButtonList(botMessage)));
 
-//        sendMessageToGroups(messageBuilder, sender);
-        sendMessageToVolunteers(messageBuilder, sender);
+        sendMessageToGroups(messageBuilder, sender);
+//        sendMessageToVolunteers(messageBuilder, sender);
 
         botMessageService.saveSentStatus(botMessage);
     }
