@@ -27,50 +27,50 @@ public class BotConfig {
     @Value("${telegram.webhook-path}")
     String webhookPath;
 
-    @Bean
-    public TGLongPoolingBot tgLongPoolingBot(@Autowired UpdateHandleService updateHandleService) {
-        if (isBotEnabled) {
-            TGLongPoolingBot TGLongPoolingBot = new TGLongPoolingBot(
-                    name, token, updateHandleService
-            );
-            log.info("Bot initialized");
-            return TGLongPoolingBot;
-        }
-
-        log.error("Bot was not initialized");
-        return null;
-    }
-
 //    @Bean
-//    public TGWebHookBot bot(
-//            @Autowired UpdateHandleService updateHandleService,
-//            SetWebhook setWebhook
-//    ) {
+//    public TGLongPoolingBot tgLongPoolingBot(@Autowired UpdateHandleService updateHandleService) {
 //        if (isBotEnabled) {
-//            TGWebHookBot bot = new TGWebHookBot(token, setWebhook);
-//            bot.setBotPath(webhookPath);
-//            bot.setBotUsername(name);
-//            bot.setUpdateHandleService(updateHandleService);
-//
+//            TGLongPoolingBot TGLongPoolingBot = new TGLongPoolingBot(
+//                    name, token, updateHandleService
+//            );
 //            log.info("Bot initialized");
-//            return bot;
+//            return TGLongPoolingBot;
 //        }
 //
 //        log.error("Bot was not initialized");
 //        return null;
 //    }
 
-//    @Bean
-//    public SetWebhook setWebhookInstance() {
-//        return SetWebhook.builder().url(webhookPath).build();
-//    }
+    @Bean
+    public TGWebHookBot bot(
+            @Autowired UpdateHandleService updateHandleService,
+            SetWebhook setWebhook
+    ) {
+        if (isBotEnabled) {
+            TGWebHookBot bot = new TGWebHookBot(token, setWebhook);
+            bot.setBotPath(webhookPath);
+            bot.setBotUsername(name);
+            bot.setUpdateHandleService(updateHandleService);
+
+            log.info("Bot initialized");
+            return bot;
+        }
+
+        log.error("Bot was not initialized");
+        return null;
+    }
 
     @Bean
-    public TelegramBotsApi telegramBotsApi(TGLongPoolingBot myTelegramTGLongPoolingBot) throws TelegramApiException {
-        TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
-        botsApi.registerBot(myTelegramTGLongPoolingBot);
-        return botsApi;
+    public SetWebhook setWebhookInstance() {
+        return SetWebhook.builder().url(webhookPath).build();
     }
+
+//    @Bean
+//    public TelegramBotsApi telegramBotsApi(TGLongPoolingBot myTelegramTGLongPoolingBot) throws TelegramApiException {
+//        TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
+//        botsApi.registerBot(myTelegramTGLongPoolingBot);
+//        return botsApi;
+//    }
 
     @Bean
     public CommandRegistry commandRegistry(@Autowired CommandService commandService) {

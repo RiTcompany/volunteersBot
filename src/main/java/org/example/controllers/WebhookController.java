@@ -10,10 +10,10 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @RestController
 @AllArgsConstructor
 public class WebhookController {
-//    private final TGWebHookBot bot;
-//
-//    @PostMapping("/")
-//    public void onUpdateReceived(@RequestBody Update update) {
-//        bot.onWebhookUpdateReceived(update);
-//    }
+    private final TGWebHookBot bot;
+
+    @PostMapping("/")
+    public void onUpdateReceived(@RequestBody Update update) {
+        bot.onWebhookUpdateReceived(update);
+    }
 }

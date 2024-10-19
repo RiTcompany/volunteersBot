@@ -125,7 +125,7 @@ public class MessageUtil {
     private static java.io.File downloadFile(File fileInfo, AbsSender sender) {
         try {
             String filePath = fileInfo.getFilePath();
-            return ((TGLongPoolingBot) sender).downloadFile(
+            return ((TGWebHookBot) sender).downloadFile(
                     filePath, new java.io.File(FILE_STORAGE_PATH.concat(filePath))
             );
         } catch (TelegramApiException e) {
