@@ -24,8 +24,8 @@ public class BotConfig {
     private String name;
     @Value("${telegram.bot.token}")
     private String token;
-    @Value("${telegram.webhook-path}")
-    String webhookPath;
+//    @Value("${telegram.webhook-path}")
+//    String webhookPath;
 
     @Bean
     public TGLongPoolingBot tgLongPoolingBot(@Autowired UpdateHandleService updateHandleService) {

@@ -1,5 +1,6 @@
 package org.example.services;
 
+import org.example.entities.Event;
 import org.example.entities.Volunteer;
 import org.example.enums.EAnorak;
 import org.example.enums.EClothingSize;
@@ -13,11 +14,15 @@ import java.util.List;
 
 @Service
 public interface VolunteerService {
+    boolean existsByChatId(long chatId);
+
     Volunteer getByChatId(long chatId) throws EntityNotFoundException;
 
     void create(long chatId, String tgUserName);
 
     List<Volunteer> findAll();
+
+    List<Volunteer> findAllByEvent(Event event);
 
     void saveBirthday(long chatId, Date birthday) throws EntityNotFoundException;
 
@@ -56,6 +61,8 @@ public interface VolunteerService {
     void saveTShirtExists(long chatId, Boolean hasTShirt) throws EntityNotFoundException;
 
     void saveSpbDistrict(long chatId, String spbDistrict) throws EntityNotFoundException;
+
+    void saveEvent(Volunteer volunteer, Event event);
 
     void updateTgLink(Volunteer volunteer, String tgUserName);
 

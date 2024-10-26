@@ -24,11 +24,6 @@ public class ParentRegisterCommand extends BotCommand {
 
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] strings) {
-//        if (parentService.exists(chat.getId())) {
-//            MessageUtil.sendMessageText("Вы уже зарегистрированы", chat.getId(), absSender);
-//        }
-//        TODO : не забыть вернуть проверку на повторную регистрацию
-
         parentService.create(chat.getId());
         conversationService.startConversation(chat.getId(), EConversation.PARENT_REGISTER, absSender);
     }

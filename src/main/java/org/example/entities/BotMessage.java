@@ -23,6 +23,8 @@ public class BotMessage {
 
     private String text;
 
+    private Long eventId;
+
     @Column(name = "writer_id")
     private Long writerId;
 

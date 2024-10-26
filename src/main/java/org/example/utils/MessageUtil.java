@@ -10,6 +10,7 @@ import org.telegram.telegrambots.bots.DefaultAbsSender;
 import org.telegram.telegrambots.meta.api.methods.GetFile;
 import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.meta.api.objects.File;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -69,6 +70,16 @@ public class MessageUtil {
             return sender.execute(sendDocument);
         } catch (TelegramApiException e) {
             log.error(EXCEPTION_MESSAGE_TEMPLATE, sendDocument.getChatId(), e.getMessage());
+        }
+
+        return null;
+    }
+
+    public static Message sendPhoto(SendPhoto sendPhoto, AbsSender sender) {
+        try {
+            return sender.execute(sendPhoto);
+        } catch (TelegramApiException e) {
+            log.error(EXCEPTION_MESSAGE_TEMPLATE, sendPhoto.getChatId(), e.getMessage());
         }
 
         return null;

@@ -42,6 +42,13 @@ public class BotMessageServiceImpl implements BotMessageService {
     }
 
     @Override
+    public void saveEventId(long botUserId, Long eventId) throws EntityNotFoundException {
+        BotMessage botMessage = getProcessedMessageByUserId(botUserId);
+        botMessage.setEventId(eventId);
+        botMessageRepository.saveAndFlush(botMessage);
+    }
+
+    @Override
     public void saveSentStatus(BotMessage botMessage) {
         botMessage.setStatus(EBotMessage.SENT);
         botMessageRepository.saveAndFlush(botMessage);

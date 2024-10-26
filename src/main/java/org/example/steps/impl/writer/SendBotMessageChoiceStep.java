@@ -8,12 +8,15 @@ import org.example.dto.ResultDto;
 import org.example.entities.BotMessage;
 import org.example.entities.BotMessageButton;
 import org.example.entities.ChatHash;
+import org.example.entities.Event;
+import org.example.entities.Volunteer;
 import org.example.enums.ERole;
 import org.example.enums.EYesNo;
 import org.example.exceptions.EntityNotFoundException;
 import org.example.mappers.KeyboardMapper;
 import org.example.services.BotMessageService;
 import org.example.services.BotUserService;
+import org.example.services.EventService;
 import org.example.services.GroupChatService;
 import org.example.services.VolunteerService;
 import org.example.steps.ChoiceStep;
@@ -36,6 +39,7 @@ public class SendBotMessageChoiceStep extends ChoiceStep {
     private final BotUserService botUserService;
     private final KeyboardMapper keyboardMapper;
     private final GroupChatService groupChatService;
+    private final EventService eventService;
     private static final String PREPARE_MESSAGE_TEXT = "Ваше сообщение:";
     private static final String CHOICE_MESSAGE_TEXT = "Вы хотите отправить данное сообщение?";
 
@@ -99,28 +103,45 @@ public class SendBotMessageChoiceStep extends ChoiceStep {
                 .setText(botMessage.getText())
                 .setInlineKeyBoard(keyboardMapper.keyboardDto(chatHash, collectButtonList(botMessage)));
 
-//        sendMessageToGroups(messageBuilder, sender);
-        sendMessageToVolunteers(messageBuilder, sender);
+        if (botMessage.getEventId() != null) {
+            sendMessageToEventVolunteers(botMessage.getEventId(), messageBuilder, sender);
+        } else {
+            sendMessageToVolunteers(messageBuilder, sender);
+        }
 
+//        sendMessageToGroups(messageBuilder, sender);
         botMessageService.saveSentStatus(botMessage);
     }
 
+    private void sendMessageToEventVolunteers(Long eventId, MessageBuilder messageBuilder, AbsSender sender) {
+        Event event = eventService.getById(eventId);
+        if (event != null) {
+            volunteerService.findAllByEvent(event).forEach(volunteer ->
+                    sendMessageToVolunteer(messageBuilder, volunteer, sender)
+            );
+            volunteerService.flush();
+        }
+    }
+
     private void sendMessageToVolunteers(MessageBuilder messageBuilder, AbsSender sender) {
-        volunteerService.findAll().forEach(volunteer -> {
-                    Message message = MessageUtil.sendMessage(
-                            messageBuilder.sendMessage(volunteer.getChatId()), sender
-                    );
-                    if (message != null) {
-                        volunteerService.updateTgLink(volunteer, message.getChat().getUserName());
-                    }
-                }
-        );
+        volunteerService.findAll().forEach(volunteer -> sendMessageToVolunteer(messageBuilder, volunteer, sender));
         volunteerService.flush();
     }
 
     private void sendMessageToGroups(MessageBuilder messageBuilder, AbsSender sender) {
-        groupChatService.findAll().forEach(groupChat -> MessageUtil.sendMessage(
-                messageBuilder.sendMessage(groupChat.getChatId()), sender
-        ));
+        groupChatService.findAll().forEach(groupChat -> sendMessage(messageBuilder, groupChat.getChatId(), sender));
+    }
+
+    private void sendMessageToVolunteer(MessageBuilder messageBuilder, Volunteer volunteer, AbsSender sender) {
+        Message message = sendMessage(messageBuilder, volunteer.getChatId(), sender);
+        if (message != null) {
+            volunteerService.updateTgLink(volunteer, message.getChat().getUserName());
+        }
+    }
+
+    private Message sendMessage(MessageBuilder messageBuilder, long chatId, AbsSender sender) {
+        return MessageUtil.sendMessage(
+                messageBuilder.sendMessage(chatId), sender
+        );
     }
 }

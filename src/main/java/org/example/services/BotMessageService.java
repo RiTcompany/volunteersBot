@@ -15,6 +15,8 @@ public interface BotMessageService {
 
     void saveText(long botUserId, String text) throws EntityNotFoundException;
 
+    void saveEventId(long botUserId, Long eventId) throws EntityNotFoundException;
+
     void saveSentStatus(BotMessage botMessage);
 
     void delete(BotMessage botMessage);

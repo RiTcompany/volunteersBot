@@ -24,11 +24,6 @@ public class VolunteerRegisterCommand extends BotCommand {
 
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] strings) {
-//        if (volunteerService.isVolunteerExists(chat.getId())) {
-//            MessageUtil.sendMessageText("Вы уже зарегистрированы", chat.getId(), absSender);
-//        }
-//        TODO : не забыть вернуть проверку на повторную регистрацию
-
         volunteerService.create(chat.getId(), chat.getUserName());
         conversationService.startConversation(chat.getId(), EConversation.VOLUNTEER_REGISTER, absSender);
     }

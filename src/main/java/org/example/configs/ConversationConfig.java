@@ -47,6 +47,8 @@ import org.example.steps.impl.volunteer.VkInputStep;
 import org.example.steps.impl.volunteer.VolunteerIdInputStep;
 import org.example.steps.impl.writer.ButtonAddChoiceStep;
 import org.example.steps.impl.writer.ButtonInputStep;
+import org.example.steps.impl.writer.EventChoiceStep;
+import org.example.steps.impl.writer.EventInputStep;
 import org.example.steps.impl.writer.SendBotMessageChoiceStep;
 import org.example.steps.impl.writer.TextInputStep;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -118,6 +120,8 @@ public class ConversationConfig {
             @Autowired TextInputStep textInputStep,
             @Autowired ButtonAddChoiceStep buttonAddChoiceStep,
             @Autowired ButtonInputStep buttonInputStep,
+            @Autowired EventChoiceStep eventChoiceStep,
+            @Autowired EventInputStep eventInputStep,
             @Autowired SendBotMessageChoiceStep sendBotMessageChoiceStep
     ) {
         return new HashMap<>() {{
@@ -151,6 +155,8 @@ public class ConversationConfig {
             put(EConversationStep.BOT_MESSAGE_TEXT_INPUT, textInputStep);
             put(EConversationStep.BOT_MESSAGE_BUTTON_ADD_CHOICE, buttonAddChoiceStep);
             put(EConversationStep.BOT_MESSAGE_BUTTON_INPUT, buttonInputStep);
+            put(EConversationStep.BOT_MESSAGE_EVENT_CHOICE, eventChoiceStep);
+            put(EConversationStep.BOT_MESSAGE_EVENT_INPUT, eventInputStep);
             put(EConversationStep.SEND_BOT_MESSAGE_CHOICE, sendBotMessageChoiceStep);
             put(EConversationStep.PARENT_FULL_NAME_INPUT, parentFullNameInputStep);
             put(EConversationStep.PARENT_BIRTHDAY_INPUT, parentBirthdayInputStep);

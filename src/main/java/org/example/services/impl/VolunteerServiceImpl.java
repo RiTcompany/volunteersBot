@@ -2,6 +2,7 @@ package org.example.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.entities.Event;
 import org.example.entities.Volunteer;
 import org.example.enums.EAnorak;
 import org.example.enums.EClothingSize;
@@ -25,6 +26,11 @@ public class VolunteerServiceImpl implements VolunteerService {
     private static final String TG_LINK_TEMPLATE = "https://t.me/";
 
     @Override
+    public boolean existsByChatId(long chatId) {
+        return volunteerRepository.existsByChatId(chatId);
+    }
+
+    @Override
     public Volunteer getByChatId(long chatId) throws EntityNotFoundException {
         return volunteerRepository.findByChatId(chatId)
                 .orElseThrow(() -> new EntityNotFoundException(
@@ -34,7 +40,7 @@ public class VolunteerServiceImpl implements VolunteerService {
 
     @Override
     public void create(long chatId, String tgUserName) {
-        if (!volunteerRepository.existsByChatId(chatId)) {
+        if (!existsByChatId(chatId)) {
             volunteerRepository.saveAndFlush(
                     volunteerMapper.volunteer(chatId, TG_LINK_TEMPLATE.concat(tgUserName))
             );
@@ -44,6 +50,11 @@ public class VolunteerServiceImpl implements VolunteerService {
     @Override
     public List<Volunteer> findAll() {
         return volunteerRepository.findAll();
+    }
+
+    @Override
+    public List<Volunteer> findAllByEvent(Event event) {
+        return volunteerRepository.findAllByEventListContains(event);
     }
 
     @Override
@@ -176,6 +187,12 @@ public class VolunteerServiceImpl implements VolunteerService {
     public void saveSpbDistrict(long chatId, String spbDistrict) throws EntityNotFoundException {
         Volunteer volunteer = getByChatId(chatId);
         volunteer.setSpbDistrict(spbDistrict);
+        volunteerRepository.saveAndFlush(volunteer);
+    }
+
+    @Override
+    public void saveEvent(Volunteer volunteer, Event event) {
+        volunteer.getEventList().add(event);
         volunteerRepository.saveAndFlush(volunteer);
     }
 

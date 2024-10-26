@@ -1,6 +1,7 @@
 package org.example.services.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.example.commands.EventListCommand;
 import org.example.commands.InfoCommand;
 import org.example.commands.SendBotMessageCommand;
 import org.example.commands.StartCommand;
@@ -9,6 +10,7 @@ import org.example.commands.document.change.impl.ChangeVolunteerPhotoCommand;
 import org.example.commands.document.check.impl.CheckChildDocumentCommand;
 import org.example.commands.document.check.impl.CheckVolunteerPhotoCommand;
 import org.example.commands.register.ParentRegisterCommand;
+import org.example.commands.register.RegisterToEventCommand;
 import org.example.commands.register.VolunteerRegisterCommand;
 import org.example.services.CommandService;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,8 @@ public class CommandServiceImpl implements CommandService {
     private final ChangeChildDocumentCommand changeChildDocumentCommand;
     private final ChangeVolunteerPhotoCommand changeVolunteerPhotoCommand;
     private final SendBotMessageCommand sendBotMessageCommand;
+    private final EventListCommand eventListCommand;
+    private final RegisterToEventCommand registerToEventCommand;
 
     public CommandRegistry registerCommands(String botName) {
         CommandRegistry commandRegistry = new CommandRegistry(true, () -> botName);
@@ -38,6 +42,8 @@ public class CommandServiceImpl implements CommandService {
         commandRegistry.register(changeChildDocumentCommand);
         commandRegistry.register(changeVolunteerPhotoCommand);
         commandRegistry.register(sendBotMessageCommand);
+        commandRegistry.register(eventListCommand);
+        commandRegistry.register(registerToEventCommand);
         return commandRegistry;
     }
 }
