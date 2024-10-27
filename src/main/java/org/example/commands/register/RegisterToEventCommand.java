@@ -67,12 +67,12 @@ public class RegisterToEventCommand extends BotCommand {
         if (event == null) {
             MessageUtil.sendMessageText(volunteer.getChatId(), INCORRECT_INPUT_MESSAGE_TEXT, absSender);
         } else {
-            volunteerService.saveEvent(volunteer, event);
+            if (!volunteer.getEventList().contains(event)) {
+                volunteerService.saveEvent(volunteer, event);
+            }
+
             try {
-                File qrCodeImageFile = qrCodeService.generateFile(volunteer.getId(), eventId);
-                SendPhoto sendPhoto = new SendPhoto(volunteer.getChatId().toString(), new InputFile(qrCodeImageFile));
-                MessageUtil.sendPhoto(sendPhoto, absSender);
-                qrCodeImageFile.delete();
+                sendQrCode(volunteer, eventId, absSender);
             } catch (IOException e) {
                 MessageUtil.sendMessageText(volunteer.getChatId(), PHOTO_EXCEPTION_MESSAGE_TEXT, absSender);
             }
@@ -80,4 +80,12 @@ public class RegisterToEventCommand extends BotCommand {
             MessageUtil.sendMessageText(volunteer.getChatId(), ANSWER, absSender);
         }
     }
+
+    private void sendQrCode(Volunteer volunteer, Long eventId, AbsSender absSender) throws IOException {
+        File qrCodeImageFile = qrCodeService.generateFile(volunteer.getId(), eventId);
+        SendPhoto sendPhoto = new SendPhoto(volunteer.getChatId().toString(), new InputFile(qrCodeImageFile));
+        MessageUtil.sendPhoto(sendPhoto, absSender);
+        qrCodeImageFile.delete();
+    }
+
 }
