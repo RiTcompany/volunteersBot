@@ -18,6 +18,10 @@ public class DateUtil {
         return null;
     }
 
+    public static String convertDate(Date date) {
+        return DATE_FORMAT.format(date);
+    }
+
     public static int getYearCountByDate(Date date) {
         TimeZone timeZone = TimeZone.getTimeZone("Europe/Moscow");
         Calendar calDate = Calendar.getInstance(timeZone);

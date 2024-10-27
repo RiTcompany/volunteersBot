@@ -1,6 +1,8 @@
 package org.example.commands;
 
+import org.example.entities.Event;
 import org.example.services.EventService;
+import org.example.utils.DateUtil;
 import org.example.utils.MessageUtil;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.BotCommand;
@@ -20,7 +22,16 @@ public class EventListCommand extends BotCommand {
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] strings) {
         StringBuilder builder = new StringBuilder();
-        eventService.getFutureAll().forEach(event -> builder.append("%d   -   %s\n".formatted(event.getId(), event.getName())));
+        eventService.getFutureAll().forEach(event -> builder.append(collectEventInfo(event)));
         MessageUtil.sendMessageText(chat.getId(), builder.toString(), absSender);
+    }
+
+    private String collectEventInfo(Event event) {
+        return "%d   -   %s   [%s - %s]\n".formatted(
+                event.getId(),
+                event.getName(),
+                DateUtil.convertDate(event.getStartTime()),
+                DateUtil.convertDate(event.getEndTime())
+        );
     }
 }
