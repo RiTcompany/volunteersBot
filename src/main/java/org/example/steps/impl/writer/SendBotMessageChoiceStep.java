@@ -63,7 +63,7 @@ public class SendBotMessageChoiceStep extends ChoiceStep {
 
     @Override
     protected int finishStep(ChatHash chatHash, AbsSender sender, String data) throws EntityNotFoundException {
-        long userId = botUserService.getByChatIdAndRole(chatHash.getId(), ERole.ROLE_WRITER).getId();
+        long userId = botUserService.getByChatIdAndRole(chatHash.getChatId(), ERole.ROLE_WRITER).getId();
         BotMessage botMessage = botMessageService.getProcessedMessageByUserId(userId);
 
         if (EYesNo.NO.toString().equals(data)) {
@@ -77,7 +77,7 @@ public class SendBotMessageChoiceStep extends ChoiceStep {
     }
 
     private void sendMessageToCheck(ChatHash chatHash, AbsSender sender) throws EntityNotFoundException {
-        long userId = botUserService.getByChatIdAndRole(chatHash.getId(), ERole.ROLE_WRITER).getId();
+        long userId = botUserService.getByChatIdAndRole(chatHash.getChatId(), ERole.ROLE_WRITER).getId();
         BotMessage botMessage = botMessageService.getProcessedMessageByUserId(userId);
 
         StepUtil.sendPrepareMessageWithInlineKeyBoard(
@@ -103,13 +103,12 @@ public class SendBotMessageChoiceStep extends ChoiceStep {
                 .setText(botMessage.getText())
                 .setInlineKeyBoard(keyboardMapper.keyboardDto(chatHash, collectButtonList(botMessage)));
 
-        if (botMessage.getEventId() != null) {
-            sendMessageToEventVolunteers(botMessage.getEventId(), messageBuilder, sender);
-        } else {
-            sendMessageToVolunteers(messageBuilder, sender);
+        switch (botMessage.getEChat()) {
+            case GROUP -> sendMessageToGroups(messageBuilder, sender);
+            case EVENT -> sendMessageToEventVolunteers(botMessage.getEventId(), messageBuilder, sender);
+            default -> sendMessageToVolunteers(messageBuilder, sender);
         }
 
-//        sendMessageToGroups(messageBuilder, sender);
         botMessageService.saveSentStatus(botMessage);
     }
 

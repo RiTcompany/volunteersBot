@@ -8,6 +8,14 @@
     <artifactId>volunteersBot</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <repositories>
+        <repository>
+            <id>com.e-iceblue</id>
+            <name>e-iceblue</name>
+            <url>https://repo.e-iceblue.com/nexus/content/groups/public/</url>
+        </repository>
+    </repositories>
+
     <packaging>jar</packaging>
 
     <properties>
@@ -64,17 +72,6 @@
             <artifactId>spring-boot-starter-data-jpa</artifactId>
             <version>3.3.0</version>
         </dependency>
-        <!-- Hash -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-            <version>3.3.0</version>
-        </dependency>
-        <dependency>
-            <groupId>redis.clients</groupId>
-            <artifactId>jedis</artifactId>
-            <version>5.1.3</version>
-        </dependency>
         <!-- QR code -->
         <dependency>
             <groupId>com.google.zxing</groupId>
@@ -85,6 +82,12 @@
             <groupId>com.google.zxing</groupId>
             <artifactId>javase</artifactId>
             <version>3.4.1</version>
+        </dependency>
+        <!-- Docx documents -->
+        <dependency>
+            <groupId>e-iceblue</groupId>
+            <artifactId>spire.doc.free</artifactId>
+            <version>5.3.2</version>
         </dependency>
         <!-- X3 -->
         <dependency>

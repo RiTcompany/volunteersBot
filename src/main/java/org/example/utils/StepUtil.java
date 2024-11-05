@@ -12,7 +12,7 @@ import org.telegram.telegrambots.meta.bots.AbsSender;
 public class StepUtil {
     public static void sendPrepareMessageOnlyText(ChatHash chatHash, String messageText, AbsSender sender) {
         SendMessage sendMessage = MessageBuilder.create().setText(messageText)
-                .sendMessage(chatHash.getId());
+                .sendMessage(chatHash.getChatId());
 
         Message message = MessageUtil.sendMessage(sendMessage, sender);
         int messageId = message != null ? message.getMessageId() : -1;
@@ -26,7 +26,7 @@ public class StepUtil {
                 MessageBuilder.create()
                         .setText(messageText)
                         .setInlineKeyBoard(keyboardDto)
-                        .sendMessage(chatHash.getId()),
+                        .sendMessage(chatHash.getChatId()),
                 sender
         );
 
@@ -39,7 +39,7 @@ public class StepUtil {
     ) {
         Message message = MessageUtil.sendMessage(
                 MessageBuilder.create().setText(messageText).setPageableKeyBoard(keyboardDto)
-                        .sendMessage(chatHash.getId()),
+                        .sendMessage(chatHash.getChatId()),
                 sender
         );
 

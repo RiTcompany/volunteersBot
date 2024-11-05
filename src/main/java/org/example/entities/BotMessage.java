@@ -11,6 +11,7 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 import org.example.enums.EBotMessage;
+import org.example.enums.EChat;
 
 @Entity
 @Table(name = "bot_message")
@@ -22,6 +23,8 @@ public class BotMessage {
     private Long id;
 
     private String text;
+
+    private EChat eChat;
 
     private Long eventId;
 

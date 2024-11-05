@@ -26,13 +26,13 @@ public class ButtonInputStep extends InputStep {
 
     @Override
     public void prepare(ChatHash chatHash, AbsSender sender) throws EntityNotFoundException {
-        MessageUtil.sendMessageText(chatHash.getId(), PREPARE_MESSAGE_TEXT, sender);
+        MessageUtil.sendMessageText(chatHash.getChatId(), PREPARE_MESSAGE_TEXT, sender);
     }
 
     @Override
     protected int finishStep(ChatHash chatHash, AbsSender sender, String data) throws EntityNotFoundException {
-        createButton(chatHash.getId(), data);
-        MessageUtil.sendMessageText(chatHash.getId(), ANSWER_MESSAGE_TEXT, sender);
+        createButton(chatHash.getChatId(), data);
+        MessageUtil.sendMessageText(chatHash.getChatId(), ANSWER_MESSAGE_TEXT, sender);
         return 0;
     }
 

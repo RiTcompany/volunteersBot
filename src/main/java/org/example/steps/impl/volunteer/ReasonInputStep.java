@@ -32,7 +32,7 @@ public class ReasonInputStep extends InputStep {
 
     @Override
     protected int finishStep(ChatHash chatHash, AbsSender sender, String data) throws EntityNotFoundException {
-        volunteerService.saveReason(chatHash.getId(), data);
+        volunteerService.saveReason(chatHash.getChatId(), data);
         sendFinishMessage(chatHash, sender, ANSWER_MESSAGE_TEXT);
         return 0;
     }

@@ -25,12 +25,12 @@ public class SendBotMessageConversation extends AConversation {
             }});
             put(EConversationStep.BOT_MESSAGE_BUTTON_ADD_CHOICE, new ArrayList<>() {{
                 add(EConversationStep.BOT_MESSAGE_BUTTON_INPUT);
-                add(EConversationStep.BOT_MESSAGE_EVENT_CHOICE);
+                add(EConversationStep.BOT_MESSAGE_TYPE_CHOICE);
             }});
             put(EConversationStep.BOT_MESSAGE_BUTTON_INPUT, new ArrayList<>() {{
                 add(EConversationStep.BOT_MESSAGE_BUTTON_ADD_CHOICE);
             }});
-            put(EConversationStep.BOT_MESSAGE_EVENT_CHOICE, new ArrayList<>() {{
+            put(EConversationStep.BOT_MESSAGE_TYPE_CHOICE, new ArrayList<>() {{
                 add(EConversationStep.BOT_MESSAGE_EVENT_INPUT);
                 add(EConversationStep.SEND_BOT_MESSAGE_CHOICE);
             }});

@@ -6,4 +6,5 @@ public enum EMessage {
     CALLBACK,
     DOCUMENT,
     PHOTO,
+    VIDEO,
 }

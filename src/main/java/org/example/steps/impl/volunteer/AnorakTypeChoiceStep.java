@@ -54,7 +54,7 @@ public class AnorakTypeChoiceStep extends ChoiceStep {
     protected int finishStep(ChatHash chatHash, AbsSender sender, String data) throws AbstractException {
         EAnorak eAnorak = EAnorak.valueOf(data);
         sendFinishMessage(chatHash, sender, getAnswerMessageText(eAnorak.getValue()));
-        volunteerService.saveAnorakType(chatHash.getId(), eAnorak);
+        volunteerService.saveAnorakType(chatHash.getChatId(), eAnorak);
         return 0;
     }
 

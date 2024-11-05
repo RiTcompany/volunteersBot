@@ -37,7 +37,7 @@ public class EmailInputStep extends InputStep {
 
     @Override
     protected int finishStep(ChatHash chatHash, AbsSender sender, String data) throws EntityNotFoundException {
-        volunteerService.saveEmail(chatHash.getId(), data);
+        volunteerService.saveEmail(chatHash.getChatId(), data);
         sendFinishMessage(chatHash, sender, getAnswerMessageText(data));
         return 0;
     }

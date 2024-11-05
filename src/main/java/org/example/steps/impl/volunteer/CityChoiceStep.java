@@ -59,7 +59,7 @@ public class CityChoiceStep extends ChoiceStep {
             return 0;
         }
 
-        volunteerService.saveCity(chatHash.getId(), ECity.SPB.getValue());
+        volunteerService.saveCity(chatHash.getChatId(), ECity.SPB.getValue());
         return 1;
     }
 

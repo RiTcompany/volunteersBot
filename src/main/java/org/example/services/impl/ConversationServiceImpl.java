@@ -86,7 +86,7 @@ public class ConversationServiceImpl implements ConversationService {
                 chatHash.getEConversation()
         );
         if (finishMessageText != null) {
-            MessageUtil.sendMessageText(chatHash.getId(), finishMessageText, sender);
+            MessageUtil.sendMessageText(chatHash.getChatId(), finishMessageText, sender);
         }
 
         chatHashService.delete(chatHash);

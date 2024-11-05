@@ -18,6 +18,8 @@ public interface VolunteerService {
 
     Volunteer getByChatId(long chatId) throws EntityNotFoundException;
 
+    Volunteer getById(Long id);
+
     void create(long chatId, String tgUserName);
 
     List<Volunteer> findAll();

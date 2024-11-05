@@ -38,7 +38,7 @@ public abstract class DocumentCheckChoiceStep extends ChoiceStep {
 
     @Override
     public void prepare(ChatHash chatHash, AbsSender sender) throws AbstractException {
-        BotUser botUser = botUserService.getByChatIdAndRole(chatHash.getId(), ERole.ROLE_MODERATOR);
+        BotUser botUser = botUserService.getByChatIdAndRole(chatHash.getChatId(), ERole.ROLE_MODERATOR);
         DocumentToCheck documentToCheck = documentService.getCheckingDocument(
                 botUser.getId(), getDocumentType()
         );
@@ -48,7 +48,7 @@ public abstract class DocumentCheckChoiceStep extends ChoiceStep {
                         .setFile(new File(documentToCheck.getPath()))
                         .setText(getPrepareMessageText())
                         .setInlineKeyBoard(keyboardMapper.keyboardDto(chatHash, ButtonUtil.yesNoButtonList()))
-                        .sendDocument(chatHash.getId()),
+                        .sendDocument(chatHash.getChatId()),
                 sender
         );
 
@@ -68,7 +68,7 @@ public abstract class DocumentCheckChoiceStep extends ChoiceStep {
             return 0;
         }
 
-        long moderatorId = botUserService.getByChatIdAndRole(chatHash.getId(), ERole.ROLE_MODERATOR).getId();
+        long moderatorId = botUserService.getByChatIdAndRole(chatHash.getChatId(), ERole.ROLE_MODERATOR).getId();
         DocumentToCheck documentToCheck = documentService.saveAcceptResponse(
                 moderatorId, getDocumentType()
         );

@@ -32,7 +32,7 @@ public class ExperienceInputStep extends InputStep {
 
     @Override
     protected int finishStep(ChatHash chatHash, AbsSender sender, String data) throws EntityNotFoundException {
-        volunteerService.saveExperience(chatHash.getId(), data);
+        volunteerService.saveExperience(chatHash.getChatId(), data);
         sendFinishMessage(chatHash, sender, ANSWER_MESSAGE_TEXT);
         return 0;
     }

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.commands.EventListCommand;
 import org.example.commands.InfoCommand;
 import org.example.commands.SendBotMessageCommand;
+import org.example.commands.SendDiplomaCommand;
 import org.example.commands.StartCommand;
 import org.example.commands.document.change.impl.ChangeChildDocumentCommand;
 import org.example.commands.document.change.impl.ChangeVolunteerPhotoCommand;
@@ -30,6 +31,7 @@ public class CommandServiceImpl implements CommandService {
     private final SendBotMessageCommand sendBotMessageCommand;
     private final EventListCommand eventListCommand;
     private final RegisterToEventCommand registerToEventCommand;
+    private final SendDiplomaCommand sendDiplomaCommand;
 
     public CommandRegistry registerCommands(String botName) {
         CommandRegistry commandRegistry = new CommandRegistry(true, () -> botName);
@@ -44,6 +46,7 @@ public class CommandServiceImpl implements CommandService {
         commandRegistry.register(sendBotMessageCommand);
         commandRegistry.register(eventListCommand);
         commandRegistry.register(registerToEventCommand);
+        commandRegistry.register(sendDiplomaCommand);
         return commandRegistry;
     }
 }

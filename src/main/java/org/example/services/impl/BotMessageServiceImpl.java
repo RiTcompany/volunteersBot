@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.entities.BotMessage;
 import org.example.entities.BotMessageButton;
 import org.example.enums.EBotMessage;
+import org.example.enums.EChat;
 import org.example.exceptions.EntityNotFoundException;
 import org.example.mappers.BotMessageMapper;
 import org.example.repositories.BotMessageRepository;
@@ -42,7 +43,14 @@ public class BotMessageServiceImpl implements BotMessageService {
     }
 
     @Override
-    public void saveEventId(long botUserId, Long eventId) throws EntityNotFoundException {
+    public void saveChatType(long botUserId, EChat eChat) throws EntityNotFoundException {
+        BotMessage botMessage = getProcessedMessageByUserId(botUserId);
+        botMessage.setEChat(eChat);
+        botMessageRepository.saveAndFlush(botMessage);
+    }
+
+    @Override
+    public void saveEventId(long botUserId, long eventId) {
         BotMessage botMessage = getProcessedMessageByUserId(botUserId);
         botMessage.setEventId(eventId);
         botMessageRepository.saveAndFlush(botMessage);

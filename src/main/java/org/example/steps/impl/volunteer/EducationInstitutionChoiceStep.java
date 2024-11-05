@@ -67,9 +67,9 @@ public class EducationInstitutionChoiceStep extends ChoiceStep {
             return 0;
         }
 
-        volunteerService.saveEducationInstitution(chatHash.getId(), data);
+        volunteerService.saveEducationInstitution(chatHash.getChatId(), data);
 
-        if (hasSpeciality(chatHash.getId())) {
+        if (hasSpeciality(chatHash.getChatId())) {
             return 1;
         }
 
@@ -87,7 +87,7 @@ public class EducationInstitutionChoiceStep extends ChoiceStep {
 
     private KeyboardDto keyboardDto(ChatHash chatHash) {
         return keyboardMapper.keyboardDto(chatHash, getButtonList(
-                educationInstitutionRepository.findAllByType(getType(chatHash.getId()))
+                educationInstitutionRepository.findAllByType(getType(chatHash.getChatId()))
         ));
     }
 

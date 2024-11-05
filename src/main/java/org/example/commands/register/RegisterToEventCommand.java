@@ -4,15 +4,14 @@ import org.example.entities.Event;
 import org.example.entities.Volunteer;
 import org.example.enums.EColor;
 import org.example.exceptions.EntityNotFoundException;
+import org.example.services.EventEducationMessageService;
 import org.example.services.EventService;
 import org.example.services.QrCodeService;
 import org.example.services.VolunteerService;
 import org.example.utils.MessageUtil;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.BotCommand;
-import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.Chat;
-import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.bots.AbsSender;
 
@@ -24,6 +23,7 @@ public class RegisterToEventCommand extends BotCommand {
     private final EventService eventService;
     private final VolunteerService volunteerService;
     private final QrCodeService qrCodeService;
+    private final EventEducationMessageService eventEducationMessageService;
     private static final String PHOTO_EXCEPTION_MESSAGE_TEXT = "Возникли проблемы с формированием вашего QR кода. Пожалуйста обратитесь в поддержку";
     private static final String NOT_REGISTERED_MESSAGE_TEXT = "Сначала вам необходимо стать волонтёром. Используйте команду /volunteer_register";
     private static final String INCORRECT_INPUT_MESSAGE_TEXT = """
@@ -33,12 +33,16 @@ public class RegisterToEventCommand extends BotCommand {
     private static final String ANSWER = "Спасибо за регистрацию на мероприятие";
 
     public RegisterToEventCommand(
-            EventService eventService, VolunteerService volunteerService, QrCodeService qrCodeService
+            EventService eventService,
+            VolunteerService volunteerService,
+            QrCodeService qrCodeService,
+            EventEducationMessageService eventEducationMessageService
     ) {
         super("register_event", "Register to event");
         this.eventService = eventService;
         this.volunteerService = volunteerService;
         this.qrCodeService = qrCodeService;
+        this.eventEducationMessageService = eventEducationMessageService;
     }
 
     @Override
@@ -68,24 +72,39 @@ public class RegisterToEventCommand extends BotCommand {
             MessageUtil.sendMessageText(volunteer.getChatId(), INCORRECT_INPUT_MESSAGE_TEXT, absSender);
         } else {
             if (!volunteer.getEventList().contains(event)) {
-                volunteerService.saveEvent(volunteer, event);
+                sendEducation(eventId, volunteer.getChatId(), absSender);
             }
 
-            try {
-                sendQrCode(volunteer, eventId, absSender);
-            } catch (IOException e) {
-                MessageUtil.sendMessageText(volunteer.getChatId(), PHOTO_EXCEPTION_MESSAGE_TEXT, absSender);
-            }
-
+            registerUserToEvent(volunteer, event);
+            sendQrCode(volunteer, eventId, absSender);
             MessageUtil.sendMessageText(volunteer.getChatId(), ANSWER, absSender);
         }
     }
 
-    private void sendQrCode(Volunteer volunteer, Long eventId, AbsSender absSender) throws IOException {
-        File qrCodeImageFile = qrCodeService.generateFile(volunteer.getId(), eventId);
-        SendPhoto sendPhoto = new SendPhoto(volunteer.getChatId().toString(), new InputFile(qrCodeImageFile));
-        MessageUtil.sendPhoto(sendPhoto, absSender);
-        qrCodeImageFile.delete();
+    private void registerUserToEvent(Volunteer volunteer, Event event) {
+        if (!volunteer.getEventList().contains(event)) {
+            volunteerService.saveEvent(volunteer, event);
+        }
     }
 
+    private void sendQrCode(Volunteer volunteer, Long eventId, AbsSender absSender) {
+        try {
+            File qrCodeImageFile = qrCodeService.generateFile(volunteer.getId(), eventId);
+            MessageUtil.sendPhoto(volunteer.getChatId(), qrCodeImageFile, absSender);
+            qrCodeImageFile.delete();
+        } catch (IOException e) {
+            MessageUtil.sendMessageText(volunteer.getChatId(), PHOTO_EXCEPTION_MESSAGE_TEXT, absSender);
+        }
+    }
+
+    private void sendEducation(Long eventId, Long chatId, AbsSender sender) {
+        eventEducationMessageService.getEventEducationMessageList(eventId)
+                .forEach(message -> {
+                    switch (message.getEMessage()) {
+                        case TEXT -> MessageUtil.sendMessageText(chatId, message.getData(), sender);
+                        case PHOTO -> MessageUtil.sendPhoto(chatId, message.getData(), sender);
+                        case VIDEO -> MessageUtil.sendVideo(chatId, message.getData(), sender);
+                    }
+                });
+    }
 }

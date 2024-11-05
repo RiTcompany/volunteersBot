@@ -11,7 +11,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 public class MessageMapper {
     public MessageDto messageDto(Update update, EMessage eMessage, ChatHash chatHash) {
         MessageDto messageDto = new MessageDto();
-        messageDto.setChatId(chatHash.getId());
+        messageDto.setChatId(chatHash.getChatId());
         messageDto.setEMessage(eMessage);
         messageDto.setData(UpdateUtil.getUserInputText(update));
 

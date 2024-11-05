@@ -18,7 +18,7 @@ public abstract class ConversationStep {
     protected void sendFinishMessage(ChatHash chatHash, AbsSender sender, String text) {
         SendMessage sendMessage = MessageBuilder.create()
                 .setText(text)
-                .sendMessage(chatHash.getId());
+                .sendMessage(chatHash.getChatId());
         MessageUtil.sendMessage(sendMessage, sender);
     }
 

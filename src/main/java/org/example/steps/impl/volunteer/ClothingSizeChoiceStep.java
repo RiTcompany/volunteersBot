@@ -54,7 +54,7 @@ public class ClothingSizeChoiceStep extends ChoiceStep {
     @Override
     protected int finishStep(ChatHash chatHash, AbsSender sender, String data) throws EntityNotFoundException {
         EClothingSize eClothingSize = EClothingSize.valueOf(data);
-        volunteerService.saveClothingSize(chatHash.getId(), eClothingSize);
+        volunteerService.saveClothingSize(chatHash.getChatId(), eClothingSize);
         sendFinishMessage(chatHash, sender, getAnswerMessageText(eClothingSize.getValue()));
         return 0;
     }

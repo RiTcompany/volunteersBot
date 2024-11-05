@@ -36,7 +36,7 @@ public class VkInputStep extends InputStep {
 
     @Override
     protected int finishStep(ChatHash chatHash, AbsSender sender, String data) throws EntityNotFoundException {
-        volunteerService.saveVk(chatHash.getId(), data);
+        volunteerService.saveVk(chatHash.getChatId(), data);
         sendFinishMessage(chatHash, sender, getAnswerMessageText(data));
         return 0;
     }

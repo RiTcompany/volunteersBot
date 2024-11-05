@@ -11,7 +11,7 @@ import java.util.List;
 public class KeyboardMapper {
     public KeyboardDto keyboardDto(ChatHash chatHash, List<ButtonDto> buttonDtoList) {
         KeyboardDto keyboardDto = new KeyboardDto();
-        keyboardDto.setChatId(chatHash.getId());
+        keyboardDto.setChatId(chatHash.getChatId());
         keyboardDto.setPageNumber(chatHash.getPrevBotMessagePageNumber());
         keyboardDto.setMessageId(chatHash.getPrevBotMessageId());
         keyboardDto.setButtonDtoList(buttonDtoList);

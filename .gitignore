@@ -1,5 +1,6 @@
 src/main/resources/static/photos
 src/main/resources/static/documents
+src/main/resources/static/diploma
 
 target/
 !.mvn/wrapper/maven-wrapper.jar

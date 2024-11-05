@@ -2,6 +2,7 @@ package org.example.services;
 
 import org.example.entities.BotMessage;
 import org.example.entities.BotMessageButton;
+import org.example.enums.EChat;
 import org.example.exceptions.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +16,7 @@ public interface BotMessageService {
 
     void saveText(long botUserId, String text) throws EntityNotFoundException;
 
-    void saveEventId(long botUserId, Long eventId) throws EntityNotFoundException;
+    void saveChatType(long botUserId, EChat eChat) throws EntityNotFoundException;
 
     void saveSentStatus(BotMessage botMessage);
 
@@ -26,4 +27,6 @@ public interface BotMessageService {
     List<BotMessageButton> getButtonList(BotMessage botMessage);
 
     void deleteButtons(BotMessage botMessage);
+
+    void saveEventId(long botUserId, long eventId);
 }

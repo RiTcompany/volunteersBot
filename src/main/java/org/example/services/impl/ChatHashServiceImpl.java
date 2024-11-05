@@ -17,7 +17,7 @@ public class ChatHashServiceImpl implements ChatHashService {
 
     @Override
     public ChatHash getChatById(long chatId) {
-        return chatHashRepository.findById(chatId).orElse(null);
+        return chatHashRepository.findByChatId(chatId).orElse(null);
     }
 
     @Override

@@ -31,7 +31,7 @@ public abstract class ChoiceStep extends ConversationStep {
     }
 
     protected void deleteKeyboard(ChatHash chatHash, AbsSender sender) {
-        long chatId = chatHash.getId();
+        long chatId = chatHash.getChatId();
         int keyBoardMessageId = chatHash.getPrevBotMessageId();
         KeyboardUtil.cleanKeyboard(chatId, keyBoardMessageId, sender);
         chatHash.setDefaultPrevBotMessagePageNumber();

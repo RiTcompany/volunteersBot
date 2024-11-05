@@ -14,7 +14,7 @@ public class ChatHashMapper {
             long chatId, EConversation eConversation, EConversationStep eConversationStep
     ) {
         ChatHash chatHash = new ChatHash();
-        chatHash.setId(chatId);
+        chatHash.setChatId(chatId);
         chatHash.setEConversation(eConversation);
         chatHash.setEConversationStep(eConversationStep);
         chatHash.setPrevBotMessageId(DEFAULT_MESSAGE_ID);

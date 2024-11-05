@@ -28,7 +28,7 @@ public class PhotoSendStep extends FileSendStep {
 
     @Override
     public void prepare(ChatHash chatHash, AbsSender sender) {
-        Message message = MessageUtil.sendMessageText(chatHash.getId(), PREPARE_MESSAGE_TEXT, sender);
+        Message message = MessageUtil.sendMessageText(chatHash.getChatId(), PREPARE_MESSAGE_TEXT, sender);
         int messageId = message != null ? message.getMessageId() : -1;
         chatHash.setPrevBotMessageId(messageId);
     }

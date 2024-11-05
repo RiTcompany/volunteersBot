@@ -1,6 +1,7 @@
 package org.example.utils;
 
 import org.example.dto.ButtonDto;
+import org.example.enums.EChat;
 import org.example.enums.EPageMove;
 import org.example.enums.EYesNo;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -15,6 +16,7 @@ public class ButtonUtil {
     private static List<InlineKeyboardButton> pageMoveButtonList;
     private static List<ButtonDto> okList;
     private static List<ButtonDto> yesNoList;
+    private static List<ButtonDto> chatTypeList;
 
     public static void addOtherChoice(List<ButtonDto> buttonDtoList) {
         buttonDtoList.add(new ButtonDto(OTHER_CHOICE, OTHER_CHOICE));
@@ -44,6 +46,14 @@ public class ButtonUtil {
         return yesNoList;
     }
 
+    public static List<ButtonDto> chatTypeButtonList() {
+        if (chatTypeList == null) {
+            chatTypeList = getChatTypeButtonDtoList();
+        }
+
+        return chatTypeList;
+    }
+
     private static List<InlineKeyboardButton> getPageMoveButtonList() {
         return Arrays.asList(
                 (new ButtonDto(EPageMove.PREV.name(), EPageMove.PREV.getValue())).toKeyboardButton(),
@@ -62,6 +72,16 @@ public class ButtonUtil {
         List<ButtonDto> buttonDtoList = new ArrayList<>();
         for (EYesNo eYesNo : eYesNoArray) {
             buttonDtoList.add(new ButtonDto(eYesNo.toString(), eYesNo.getValue()));
+        }
+
+        return buttonDtoList;
+    }
+
+    private static List<ButtonDto> getChatTypeButtonDtoList() {
+        EChat[] eChats = EChat.values();
+        List<ButtonDto> buttonDtoList = new ArrayList<>();
+        for (EChat eChat : eChats) {
+            buttonDtoList.add(new ButtonDto(eChat.toString(), eChat.getValue()));
         }
 
         return buttonDtoList;

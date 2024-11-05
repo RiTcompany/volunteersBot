@@ -37,7 +37,7 @@ public class PhoneInputStep extends InputStep {
 
     @Override
     protected int finishStep(ChatHash chatHash, AbsSender sender, String data) throws EntityNotFoundException {
-        volunteerService.savePhone(chatHash.getId(), formatPhone(data));
+        volunteerService.savePhone(chatHash.getChatId(), formatPhone(data));
         sendFinishMessage(chatHash, sender, getAnswerMessageText(formatPhone(data)));
         return 0;
     }

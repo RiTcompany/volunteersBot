@@ -58,7 +58,7 @@ public class SpbDistrictChoiceStep extends ChoiceStep {
     @Override
     protected int finishStep(ChatHash chatHash, AbsSender sender, String data) throws AbstractException {
         sendFinishMessage(chatHash, sender, getAnswerMessageText(data));
-        volunteerService.saveSpbDistrict(chatHash.getId(), data);
+        volunteerService.saveSpbDistrict(chatHash.getChatId(), data);
         return 0;
     }
 

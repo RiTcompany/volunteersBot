@@ -39,7 +39,7 @@ public class CityInputStep extends InputStep {
 
     @Override
     protected int finishStep(ChatHash chatHash, AbsSender sender, String data) throws EntityNotFoundException {
-        volunteerService.saveCity(chatHash.getId(), setCityRegister(data));
+        volunteerService.saveCity(chatHash.getChatId(), setCityRegister(data));
         sendFinishMessage(chatHash, sender, getAnswerMessageText(setCityRegister(data)));
         return 0;
     }

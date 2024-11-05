@@ -55,7 +55,7 @@ public class GenderChoiceStep extends ChoiceStep {
     protected int finishStep(ChatHash chatHash, AbsSender sender, String data) throws EntityNotFoundException {
         EGender eGender = EGender.valueOf(data);
         sendFinishMessage(chatHash, sender, getAnswerMessageText(eGender.getValue()));
-        volunteerService.saveGender(chatHash.getId(), eGender);
+        volunteerService.saveGender(chatHash.getChatId(), eGender);
         return 0;
     }
 

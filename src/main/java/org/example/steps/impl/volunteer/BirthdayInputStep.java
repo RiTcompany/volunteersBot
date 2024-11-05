@@ -35,7 +35,7 @@ public class BirthdayInputStep extends InputStep {
 
     @Override
     protected int finishStep(ChatHash chatHash, AbsSender sender, String data) throws EntityNotFoundException {
-        volunteerService.saveBirthday(chatHash.getId(), DateUtil.convertDate(data));
+        volunteerService.saveBirthday(chatHash.getChatId(), DateUtil.convertDate(data));
         sendFinishMessage(chatHash, sender, getAnswerMessageText(data));
         return isMinor(DateUtil.convertDate(data)) ? 0 : 1;
     }

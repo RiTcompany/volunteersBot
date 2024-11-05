@@ -26,7 +26,7 @@ public class EducationalSpecialtyInputStep extends InputStep {
 
     @Override
     protected int finishStep(ChatHash chatHash, AbsSender sender, String data) throws AbstractException {
-        volunteerService.saveEducationSpeciality(chatHash.getId(), data);
+        volunteerService.saveEducationSpeciality(chatHash.getChatId(), data);
         sendFinishMessage(chatHash, sender, getAnswerMessageText(data));
         return 0;
     }

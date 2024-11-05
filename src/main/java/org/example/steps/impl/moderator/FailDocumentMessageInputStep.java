@@ -40,7 +40,7 @@ public abstract class FailDocumentMessageInputStep extends InputStep {
 
     @Override
     protected int finishStep(ChatHash chatHash, AbsSender sender, String data) throws EntityNotFoundException {
-        long moderatorId = botUserService.getByChatIdAndRole(chatHash.getId(), ERole.ROLE_MODERATOR).getId();
+        long moderatorId = botUserService.getByChatIdAndRole(chatHash.getChatId(), ERole.ROLE_MODERATOR).getId();
         DocumentToCheck documentToCheck = documentService.saveFailResponse(
                 moderatorId, data, getDocumentType()
         );

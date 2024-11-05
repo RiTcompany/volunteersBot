@@ -17,7 +17,7 @@ public abstract class FileSendStep extends ConversationStep {
             return handleIllegalUserAction(messageDto, sender, result.getMessage());
         }
 
-        downloadFile(chatHash.getId(), messageDto, sender);
+        downloadFile(chatHash.getChatId(), messageDto, sender);
         return finishStep(chatHash, sender, getAnswerMessageText());
     }
 

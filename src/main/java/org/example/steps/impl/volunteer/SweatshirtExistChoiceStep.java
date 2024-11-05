@@ -41,7 +41,7 @@ public class SweatshirtExistChoiceStep extends ChoiceStep {
 
     @Override
     protected int finishStep(ChatHash chatHash, AbsSender sender, String data) throws AbstractException {
-        volunteerService.saveSweatshirtExists(chatHash.getId(), EYesNo.YES.toString().equals(data));
+        volunteerService.saveSweatshirtExists(chatHash.getChatId(), EYesNo.YES.toString().equals(data));
 
         return 0;
     }

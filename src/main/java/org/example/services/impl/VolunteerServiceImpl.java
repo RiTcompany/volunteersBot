@@ -39,6 +39,14 @@ public class VolunteerServiceImpl implements VolunteerService {
     }
 
     @Override
+    public Volunteer getById(Long id) {
+        return volunteerRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Не существует волонтёра с ID = %d".formatted(id)
+                ));
+    }
+
+    @Override
     public void create(long chatId, String tgUserName) {
         if (!existsByChatId(chatId)) {
             volunteerRepository.saveAndFlush(

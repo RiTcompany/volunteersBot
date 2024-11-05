@@ -1,8 +1,6 @@
 package org.example.utils;
 
 import lombok.extern.slf4j.Slf4j;
-import org.example.bots.TGLongPoolingBot;
-import org.example.bots.TGWebHookBot;
 import org.example.builders.MessageBuilder;
 import org.example.builders.PageableInlineKeyboardMarkupBuilder;
 import org.example.dto.KeyboardDto;
@@ -11,8 +9,10 @@ import org.telegram.telegrambots.meta.api.methods.GetFile;
 import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
+import org.telegram.telegrambots.meta.api.methods.send.SendVideo;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.meta.api.objects.File;
+import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.bots.AbsSender;
@@ -53,6 +53,27 @@ public class MessageUtil {
         );
     }
 
+    public static Message sendPhoto(Long chatId, String url, AbsSender sender) {
+        return sendPhoto(new SendPhoto(chatId.toString(), new InputFile(new java.io.File(url))), sender);
+    }
+
+    public static Message sendPhoto(Long chatId, java.io.File file, AbsSender sender) {
+        return sendPhoto(new SendPhoto(chatId.toString(), new InputFile(file)), sender);
+    }
+
+    public static Message sendVideo(Long chatId, String url, AbsSender sender) {
+        return sendVideo(new SendVideo(chatId.toString(), new InputFile(new java.io.File(url))), sender);
+    }
+
+    public static Message sendVideo(Long chatId, java.io.File file, AbsSender sender) {
+        return sendVideo(new SendVideo(chatId.toString(), new InputFile(file)), sender);
+    }
+
+    public static Message sendDocument(Long chatId, String url, AbsSender sender) {
+        System.out.println(new java.io.File(url).length());
+        return sendDocument(new SendDocument(chatId.toString(), new InputFile(new java.io.File(url))), sender);
+    }
+
     public static Message sendMessage(SendMessage sendMessage, AbsSender sender) {
         try {
             sendMessage.enableHtml(true);
@@ -85,6 +106,15 @@ public class MessageUtil {
         return null;
     }
 
+    public static Message sendVideo(SendVideo sendVideo, AbsSender sender) {
+        try {
+            return sender.execute(sendVideo);
+        } catch (TelegramApiException e) {
+            log.error(EXCEPTION_MESSAGE_TEMPLATE, sendVideo.getChatId(), e.getMessage());
+        }
+
+        return null;
+    }
 
     private static EditMessageReplyMarkup editMessageWithKeyboard(KeyboardDto keyboardDto) {
         InlineKeyboardMarkup inlineKeyboardMarkup = inlineKeyboard(keyboardDto);

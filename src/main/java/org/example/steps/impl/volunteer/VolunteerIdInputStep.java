@@ -35,7 +35,7 @@ public class VolunteerIdInputStep extends InputStep {
 
     @Override
     protected int finishStep(ChatHash chatHash, AbsSender sender, String data) throws EntityNotFoundException {
-        volunteerService.saveVolunteerId(chatHash.getId(), data);
+        volunteerService.saveVolunteerId(chatHash.getChatId(), data);
         sendFinishMessage(chatHash, sender, getAnswerMessageText(data));
         return 0;
     }

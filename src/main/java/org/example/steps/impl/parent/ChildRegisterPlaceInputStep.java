@@ -36,7 +36,7 @@ public class ChildRegisterPlaceInputStep extends InputStep {
 
     @Override
     protected int finishStep(ChatHash chatHash, AbsSender sender, String data) throws EntityNotFoundException {
-        parentService.saveChildRegisterPlace(chatHash.getId(), data);
+        parentService.saveChildRegisterPlace(chatHash.getChatId(), data);
         sendFinishMessage(chatHash, sender, getAnswerMessageText(data));
         return 0;
     }

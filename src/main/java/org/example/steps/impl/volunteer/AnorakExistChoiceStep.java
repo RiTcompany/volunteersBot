@@ -42,11 +42,11 @@ public class AnorakExistChoiceStep extends ChoiceStep {
     @Override
     protected int finishStep(ChatHash chatHash, AbsSender sender, String data) throws AbstractException {
         if (EYesNo.NO.toString().equals(data)) {
-            volunteerService.saveAnorakExists(chatHash.getId(), false);
+            volunteerService.saveAnorakExists(chatHash.getChatId(), false);
             return 0;
         }
 
-        volunteerService.saveAnorakExists(chatHash.getId(), true);
+        volunteerService.saveAnorakExists(chatHash.getChatId(), true);
         return 1;
     }
 }

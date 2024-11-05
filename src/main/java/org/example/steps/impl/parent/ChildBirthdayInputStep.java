@@ -32,7 +32,7 @@ public class ChildBirthdayInputStep extends InputStep {
 
     @Override
     protected int finishStep(ChatHash chatHash, AbsSender sender, String data) throws EntityNotFoundException {
-        parentService.saveChildBirthday(chatHash.getId(), DateUtil.convertDate(data));
+        parentService.saveChildBirthday(chatHash.getChatId(), DateUtil.convertDate(data));
         sendFinishMessage(chatHash, sender, getAnswerMessageText(data));
         return 0;
     }

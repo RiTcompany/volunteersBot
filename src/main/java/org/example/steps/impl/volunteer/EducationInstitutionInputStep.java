@@ -32,10 +32,10 @@ public class EducationInstitutionInputStep extends InputStep {
 
     @Override
     protected int finishStep(ChatHash chatHash, AbsSender sender, String data) throws EntityNotFoundException {
-        volunteerService.saveEducationInstitution(chatHash.getId(), data);
+        volunteerService.saveEducationInstitution(chatHash.getChatId(), data);
         sendFinishMessage(chatHash, sender, getAnswerMessageText(data));
 
-        if (hasSpeciality(chatHash.getId())) {
+        if (hasSpeciality(chatHash.getChatId())) {
             return 0;
         }
 

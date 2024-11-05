@@ -2,7 +2,6 @@ package org.example.configs;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.bots.TGLongPoolingBot;
-import org.example.bots.TGWebHookBot;
 import org.example.services.CommandService;
 import org.example.services.UpdateHandleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.CommandRegistry;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
-import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 

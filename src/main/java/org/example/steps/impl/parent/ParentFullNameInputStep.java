@@ -31,7 +31,7 @@ public class ParentFullNameInputStep extends InputStep {
 
     @Override
     protected int finishStep(ChatHash chatHash, AbsSender sender, String data) throws EntityNotFoundException {
-        parentService.saveParentFullName(chatHash.getId(), data);
+        parentService.saveParentFullName(chatHash.getChatId(), data);
         sendFinishMessage(chatHash, sender, getAnswerMessageText(data));
         return 0;
     }
