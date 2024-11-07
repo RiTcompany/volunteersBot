@@ -26,4 +26,16 @@ public class VolunteerEvent {
 
     @Column(name = "is_here", columnDefinition = "boolean default 'false'")
     private Boolean isHere;
+
+    @Column(name = "is_training_passed", columnDefinition = "boolean default 'false'")
+    private Boolean isTrainingPassed;
+
+    public VolunteerEvent(Long volunteerId, Long eventId) {
+        this.volunteerId = volunteerId;
+        this.eventId = eventId;
+    }
+
+    public VolunteerEvent() {
+
+    }
 }

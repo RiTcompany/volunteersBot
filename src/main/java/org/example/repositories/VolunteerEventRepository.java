@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface VolunteerEventRepository extends JpaRepository<VolunteerEvent, Long> {
     List<VolunteerEvent> findAllByEventIdAndIsHereTrue(long eventId);
+
+    boolean existsByVolunteerIdAndEventId(Long volunteerId, Long eventId);
 }

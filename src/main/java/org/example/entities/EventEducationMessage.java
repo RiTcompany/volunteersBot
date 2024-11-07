@@ -33,4 +33,15 @@ public class EventEducationMessage {
     @Column(name = "e_message")
     @Enumerated(EnumType.STRING)
     private EMessage eMessage;
+
+    public EventEducationMessage(Long eventId, int messageNumber, String data, EMessage eMessage) {
+        this.eventId = eventId;
+        this.messageNumber = messageNumber;
+        this.data = data;
+        this.eMessage = eMessage;
+    }
+
+    public EventEducationMessage() {
+
+    }
 }
