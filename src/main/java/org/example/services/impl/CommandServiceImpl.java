@@ -10,6 +10,8 @@ import org.example.commands.document.change.impl.ChangeChildDocumentCommand;
 import org.example.commands.document.change.impl.ChangeVolunteerPhotoCommand;
 import org.example.commands.document.check.impl.CheckChildDocumentCommand;
 import org.example.commands.document.check.impl.CheckVolunteerPhotoCommand;
+import org.example.commands.education.AddResultLinkCommand;
+import org.example.commands.education.AddTrainingLinkCommand;
 import org.example.commands.register.ParentRegisterCommand;
 import org.example.commands.register.RegisterToEventCommand;
 import org.example.commands.register.VolunteerRegisterCommand;
@@ -32,6 +34,8 @@ public class CommandServiceImpl implements CommandService {
     private final EventListCommand eventListCommand;
     private final RegisterToEventCommand registerToEventCommand;
     private final SendDiplomaCommand sendDiplomaCommand;
+    private final AddTrainingLinkCommand addTrainingLinkCommand;
+    private final AddResultLinkCommand addResultLinkCommand;
 
     public CommandRegistry registerCommands(String botName) {
         CommandRegistry commandRegistry = new CommandRegistry(true, () -> botName);
@@ -47,6 +51,8 @@ public class CommandServiceImpl implements CommandService {
         commandRegistry.register(eventListCommand);
         commandRegistry.register(registerToEventCommand);
         commandRegistry.register(sendDiplomaCommand);
+        commandRegistry.register(addResultLinkCommand);
+        commandRegistry.register(addTrainingLinkCommand);
         return commandRegistry;
     }
 }

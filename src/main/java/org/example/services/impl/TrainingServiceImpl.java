@@ -28,7 +28,6 @@ import java.util.regex.Pattern;
 @Service
 @RequiredArgsConstructor
 public class TrainingServiceImpl implements TrainingService {
-
     private final EventRepository eventRepository;
     private final EventEducationMessageRepository eventEducationMessageRepository;
     private final VolunteerEventRepository volunteerEventRepository;
@@ -36,10 +35,10 @@ public class TrainingServiceImpl implements TrainingService {
 
     @Override
     public Event addTrainingLink(Long eventId, String trainingLink) {
-
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new EventNotFoundException(eventId.toString()));
         event.setTrainingLink(trainingLink);
+//        eventEducationMessageRepository.count();
         eventEducationMessageRepository.save(
                 new EventEducationMessage(eventId, 6, event.getTrainingLink(), EMessage.TEXT));
         return eventRepository.save(event);
