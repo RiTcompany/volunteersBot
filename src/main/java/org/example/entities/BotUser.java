@@ -11,6 +11,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.List;
 @Table(name = "bot_user")
 @Getter
 @Setter
+@NoArgsConstructor
 public class BotUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,4 +36,8 @@ public class BotUser {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private List<Role> roleList;
+
+    public BotUser(Long tgId) {
+        this.tgId = tgId;
+    }
 }

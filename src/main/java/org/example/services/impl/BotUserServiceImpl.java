@@ -37,6 +37,23 @@ public class BotUserServiceImpl implements BotUserService {
         return botUserRepository.existsByTgId(chatId);
     }
 
+    @Override
+    public BotUser create(Long chatId) {
+        return botUserRepository.saveAndFlush(new BotUser(chatId));
+    }
+
+    @Override
+    public BotUser getByChatId(Long chatId) {
+        return botUserRepository.findByTgId(chatId).orElseThrow(() ->
+                new EntityNotFoundException("Не существует пользователя ID=".concat(String.valueOf(chatId)))
+        );
+    }
+
+    @Override
+    public void save(BotUser botUser) {
+        botUserRepository.saveAndFlush(botUser);
+    }
+
     private EntityNotFoundException getException(ERole eRole, long chatId) {
         return new EntityNotFoundException("Не существует %s с ID = %d".formatted(eRole, chatId));
     }

@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.example.enums.ERole;
 
@@ -16,6 +17,7 @@ import org.example.enums.ERole;
 @Table(name = "role")
 @Getter
 @Setter
+@NoArgsConstructor
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,4 +26,8 @@ public class Role {
     @Enumerated(EnumType.STRING)
     @Column(name = "role_name")
     private ERole roleName;
+
+    public Role(ERole roleName) {
+        this.roleName = roleName;
+    }
 }

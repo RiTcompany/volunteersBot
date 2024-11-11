@@ -12,4 +12,10 @@ public interface BotUserService {
     boolean hasRole(BotUser botUser, ERole eRole);
 
     boolean existsByTgId(long chatId);
+
+    BotUser create(Long chatId);
+
+    BotUser getByChatId(Long chatId);
+
+    void save(BotUser botUser);
 }

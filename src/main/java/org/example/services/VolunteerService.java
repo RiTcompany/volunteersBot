@@ -69,4 +69,6 @@ public interface VolunteerService {
     void updateTgLink(Volunteer volunteer, String tgUserName);
 
     void flush();
+
+    Volunteer getByVolunteerId(Long volunteerId);
 }

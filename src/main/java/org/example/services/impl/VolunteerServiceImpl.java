@@ -217,4 +217,11 @@ public class VolunteerServiceImpl implements VolunteerService {
     public void flush() {
         volunteerRepository.flush();
     }
+
+    @Override
+    public Volunteer getByVolunteerId(Long volunteerId) {
+        return volunteerRepository.findByVolunteerId(volunteerId).orElseThrow(() ->
+                new EntityNotFoundException("Не существует волонтера ID=".concat(String.valueOf(volunteerId)))
+        );
+    }
 }
