@@ -14,6 +14,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -39,5 +40,6 @@ public class BotUser {
 
     public BotUser(Long tgId) {
         this.tgId = tgId;
+        this.roleList = new ArrayList<>();
     }
 }
