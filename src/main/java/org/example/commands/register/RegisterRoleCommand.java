@@ -2,6 +2,7 @@ package org.example.commands.register;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.entities.BotUser;
+import org.example.entities.Role;
 import org.example.entities.Volunteer;
 import org.example.enums.ERole;
 import org.example.exceptions.EntityNotFoundException;
@@ -45,25 +46,19 @@ public class RegisterRoleCommand extends BotCommand {
         }
 
         try {
-            BotUser botUserBoss = botUserService.getByChatIdAndRole(chat.getId(), ERole.ROLE_BOSS);
+            BotUser botUserAdmin = botUserService.getByChatId(chat.getId());
+            ERole newRole = ERole.valueOf(arguments[1]);
 
-            Volunteer volunteer = volunteerService.getByVolunteerId(Long.valueOf(arguments[0]));
-            ERole eRole = ERole.valueOf(arguments[1]);
+            if (hasAdminAccess(botUserAdmin, newRole)) {
+                Volunteer volunteer = volunteerService.getByVolunteerId(Long.valueOf(arguments[0]));
+                BotUser newBotUserAdmin = getBotUser(volunteer.getChatId());
+                getRoleToUser(newBotUserAdmin, newRole);
+                sendAcceptMessage(chat.getId(), volunteer.getVolunteerId(), newRole, absSender);
 
-            BotUser newBotUserAdmin = !botUserService.existsByTgId(volunteer.getChatId())
-                    ? botUserService.create(volunteer.getChatId())
-                    : botUserService.getByChatId(volunteer.getChatId());
-
-            if (!botUserService.hasRole(newBotUserAdmin, eRole)) {
-                newBotUserAdmin.getRoleList().add(roleService.getByName(eRole));
-                botUserService.save(newBotUserAdmin);
+                return;
             }
 
-            MessageUtil.sendMessageText(
-                    chat.getId(),
-                    "Роль %s присвоена волонтёру ID=%d".formatted(eRole, volunteer.getVolunteerId()),
-                    absSender
-            );
+            MessageUtil.sendMessageText(chat.getId(), "Недостаточно прав", absSender);
         } catch (EntityNotFoundException e) {
             log.error(e.getMessage());
             MessageUtil.sendMessageText(chat.getId(), "Недостаточно прав", absSender);
@@ -74,4 +69,28 @@ public class RegisterRoleCommand extends BotCommand {
         }
     }
 
+    private boolean hasAdminAccess(BotUser botUserAdmin, ERole newRole) {
+        return botUserAdmin.getRoleList().stream().anyMatch(role -> ERole.compare(role.getRoleName(), newRole) > 0);
+    }
+
+    private BotUser getBotUser(Long chatId) {
+        return !botUserService.existsByTgId(chatId)
+                ? botUserService.create(chatId)
+                : botUserService.getByChatId(chatId);
+    }
+
+    private void getRoleToUser(BotUser newBotUserAdmin, ERole newRole) {
+        if (!botUserService.hasRole(newBotUserAdmin, newRole)) {
+            newBotUserAdmin.getRoleList().add(roleService.getByName(newRole));
+            botUserService.save(newBotUserAdmin);
+        }
+    }
+
+    private void sendAcceptMessage(long chatId, long volunteerId, ERole newRole, AbsSender absSender) {
+        MessageUtil.sendMessageText(
+                chatId,
+                "Роль %s присвоена волонтёру ID=%d".formatted(newRole, volunteerId),
+                absSender
+        );
+    }
 }
