@@ -6,9 +6,9 @@ import org.example.entities.Volunteer;
 import org.example.enums.ERole;
 import org.example.exceptions.EntityNotFoundException;
 import org.example.services.BotUserService;
-import org.example.services.RoleService;
 import org.example.services.VolunteerService;
 import org.example.utils.MessageUtil;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.BotCommand;
 import org.telegram.telegrambots.meta.api.objects.Chat;
@@ -17,47 +17,46 @@ import org.telegram.telegrambots.meta.bots.AbsSender;
 
 @Slf4j
 @Component
-public class RegisterRoleCommand extends BotCommand {
+public class RegisterWebCommand extends BotCommand {
     private final BotUserService botUserService;
     private final VolunteerService volunteerService;
-    private final RoleService roleService;
+    private final PasswordEncoder passwordEncoder;
     private static final String INCORRECT_INPUT_MESSAGE_TEXT = """
-            Неверный ввод. Пожалуйста введите команду, а затем ID волонтера через пробел, а также желаемую роль.
+            Неверный ввод. Пожалуйста введите команду, а затем ID волонтера через пробел, а также пароль.
             ID волонтера можно найти на платформе.
-            Пример: /register_admin 123 роль""";
+            Пример: /register_admin 123 пароль""";
 
-    public RegisterRoleCommand(
+    public RegisterWebCommand(
             BotUserService botUserService,
             VolunteerService volunteerService,
-            RoleService roleService
+            PasswordEncoder passwordEncoder
     ) {
-        super("register_admin", "Register admin");
+        super("register_web_permission", "Register user to web platform");
         this.botUserService = botUserService;
         this.volunteerService = volunteerService;
-        this.roleService = roleService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] arguments) {
         try {
-            BotUser botUserAdmin = botUserService.getByChatId(chat.getId());
+            BotUser botUserAdmin = botUserService.getByChatIdAndRole(chat.getId(), ERole.ROLE_BOSS);
 
             if (arguments.length != 2) {
                 MessageUtil.sendMessageText(chat.getId(), INCORRECT_INPUT_MESSAGE_TEXT, absSender);
                 return;
             }
 
-            ERole newRole = ERole.valueOf(arguments[1]);
-            if (hasAdminAccess(botUserAdmin, newRole)) {
-                Volunteer volunteer = volunteerService.getByVolunteerId(Long.valueOf(arguments[0]));
-                BotUser newBotUserAdmin = getBotUser(volunteer.getChatId());
-                getRoleToUser(newBotUserAdmin, newRole);
-                sendAcceptMessage(chat.getId(), volunteer.getVolunteerId(), newRole, absSender);
+            long volunteerId = Long.parseLong(arguments[0]);
+            String password = arguments[1];
 
-                return;
-            }
+            Volunteer volunteer = volunteerService.getByVolunteerId(volunteerId);
+            BotUser botUser = getBotUser(volunteer.getChatId());
+            botUser.setEmail(volunteer.getEmail());
+            botUser.setPassword(passwordEncoder.encode(password));
+            botUserService.save(botUser);
 
-            MessageUtil.sendMessageText(chat.getId(), "Недостаточно прав", absSender);
+            sendAcceptMessage(chat.getId(), botUser.getEmail(), password, absSender);
         } catch (EntityNotFoundException e) {
             log.error(e.getMessage());
             MessageUtil.sendMessageText(chat.getId(), "Недостаточно прав", absSender);
@@ -68,27 +67,16 @@ public class RegisterRoleCommand extends BotCommand {
         }
     }
 
-    private boolean hasAdminAccess(BotUser botUserAdmin, ERole newRole) {
-        return botUserAdmin.getRoleList().stream().anyMatch(role -> ERole.compare(role.getRoleName(), newRole) > 0);
-    }
-
     private BotUser getBotUser(Long chatId) {
         return !botUserService.existsByTgId(chatId)
                 ? botUserService.create(chatId)
                 : botUserService.getByChatId(chatId);
     }
 
-    private void getRoleToUser(BotUser newBotUserAdmin, ERole newRole) {
-        if (!botUserService.hasRole(newBotUserAdmin, newRole)) {
-            newBotUserAdmin.getRoleList().add(roleService.getByName(newRole));
-            botUserService.save(newBotUserAdmin);
-        }
-    }
-
-    private void sendAcceptMessage(long chatId, long volunteerId, ERole newRole, AbsSender absSender) {
+    private void sendAcceptMessage(long chatId, String email, String password, AbsSender absSender) {
         MessageUtil.sendMessageText(
                 chatId,
-                "Роль %s присвоена волонтёру ID=%d".formatted(newRole, volunteerId),
+                "Доступ к платформе теперь доступен.\nLogin: %s\nPassword: %s".formatted(email, password),
                 absSender
         );
     }

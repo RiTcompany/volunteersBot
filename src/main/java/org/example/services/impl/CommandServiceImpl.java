@@ -15,6 +15,7 @@ import org.example.commands.education.AddTrainingLinkCommand;
 import org.example.commands.register.ParentRegisterCommand;
 import org.example.commands.register.RegisterRoleCommand;
 import org.example.commands.register.RegisterToEventCommand;
+import org.example.commands.register.RegisterWebCommand;
 import org.example.commands.register.VolunteerRegisterCommand;
 import org.example.services.CommandService;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,7 @@ public class CommandServiceImpl implements CommandService {
     private final AddTrainingLinkCommand addTrainingLinkCommand;
     private final AddResultLinkCommand addResultLinkCommand;
     private final RegisterRoleCommand registerRoleCommand;
+    private final RegisterWebCommand registerWebCommand;
 
     public CommandRegistry registerCommands(String botName) {
         CommandRegistry commandRegistry = new CommandRegistry(true, () -> botName);
@@ -56,6 +58,7 @@ public class CommandServiceImpl implements CommandService {
         commandRegistry.register(addResultLinkCommand);
         commandRegistry.register(addTrainingLinkCommand);
         commandRegistry.register(registerRoleCommand);
+        commandRegistry.register(registerWebCommand);
         return commandRegistry;
     }
 }

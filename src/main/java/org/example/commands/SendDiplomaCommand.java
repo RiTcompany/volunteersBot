@@ -53,13 +53,14 @@ public class SendDiplomaCommand extends BotCommand {
 
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] arguments) {
-        if (arguments.length != 1) {
-            MessageUtil.sendMessageText(chat.getId(), INCORRECT_INPUT_MESSAGE_TEXT, absSender);
-            return;
-        }
-
         try {
             BotUser botUser = botUserService.getByChatIdAndRole(chat.getId(), ERole.ROLE_WRITER);
+
+            if (arguments.length != 1) {
+                MessageUtil.sendMessageText(chat.getId(), INCORRECT_INPUT_MESSAGE_TEXT, absSender);
+                return;
+            }
+
             sendMessageToEventVolunteers(Long.valueOf(arguments[0]), absSender);
             MessageUtil.sendMessageText(chat.getId(), "Все дипломы отправлены", absSender);
         } catch (EntityNotFoundException e) {

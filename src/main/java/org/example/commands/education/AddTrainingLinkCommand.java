@@ -34,13 +34,14 @@ public class AddTrainingLinkCommand extends BotCommand {
 
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] arguments) {
-        if (arguments.length != 2) {
-            MessageUtil.sendMessageText(chat.getId(), INCORRECT_INPUT_MESSAGE_TEXT, absSender);
-            return;
-        }
-
         try {
             BotUser botUser = botUserService.getByChatIdAndRole(chat.getId(), ERole.ROLE_WRITER);
+
+            if (arguments.length != 2) {
+                MessageUtil.sendMessageText(chat.getId(), INCORRECT_INPUT_MESSAGE_TEXT, absSender);
+                return;
+            }
+
             long eventId = Long.parseLong(arguments[0]);
             String link = arguments[1];
             trainingService.addTrainingLink(eventId, link);

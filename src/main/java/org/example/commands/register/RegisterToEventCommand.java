@@ -52,13 +52,14 @@ public class RegisterToEventCommand extends BotCommand {
 
     @Override
     public void execute(AbsSender absSender, User user, Chat chat, String[] strings) {
-        if (strings.length != 1) {
-            MessageUtil.sendMessageText(chat.getId(), INCORRECT_INPUT_MESSAGE_TEXT, absSender);
-            return;
-        }
-
         try {
             Volunteer volunteer = volunteerService.getByChatId(chat.getId());
+
+            if (strings.length != 1) {
+                MessageUtil.sendMessageText(chat.getId(), INCORRECT_INPUT_MESSAGE_TEXT, absSender);
+                return;
+            }
+
             if (EColor.RED.equals(volunteer.getColor())) {
                 MessageUtil.sendMessageText(chat.getId(), ANSWER, absSender);
             } else {
