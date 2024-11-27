@@ -24,7 +24,7 @@ public class RegisterWebCommand extends BotCommand {
     private static final String INCORRECT_INPUT_MESSAGE_TEXT = """
             Неверный ввод. Пожалуйста введите команду, а затем ID волонтера через пробел, а также пароль.
             ID волонтера можно найти на платформе.
-            Пример: /register_admin 123 пароль""";
+            Пример: /register_web_permission 123 пароль""";
 
     public RegisterWebCommand(
             BotUserService botUserService,
