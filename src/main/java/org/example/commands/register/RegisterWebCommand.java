@@ -22,9 +22,9 @@ public class RegisterWebCommand extends BotCommand {
     private final VolunteerService volunteerService;
     private final PasswordEncoder passwordEncoder;
     private static final String INCORRECT_INPUT_MESSAGE_TEXT = """
-            Неверный ввод. Пожалуйста введите команду, а затем ID волонтера через пробел, а также пароль.
+            Неверный ввод. Пожалуйста введите команду, а затем ID волонтера через пробел, а также пароль (от 8 до 255 символов).
             ID волонтера можно найти на платформе.
-            Пример: /register_web_permission 123 пароль""";
+            Пример: /register_web_permission 123 пароль123""";
 
     public RegisterWebCommand(
             BotUserService botUserService,
