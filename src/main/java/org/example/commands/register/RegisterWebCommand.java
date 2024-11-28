@@ -42,7 +42,7 @@ public class RegisterWebCommand extends BotCommand {
         try {
             BotUser botUserAdmin = botUserService.getByChatIdAndRole(chat.getId(), ERole.ROLE_BOSS);
 
-            if (arguments.length != 2) {
+            if (arguments.length != 2 || 8 > arguments[1].length() || arguments[1].length() > 255) {
                 MessageUtil.sendMessageText(chat.getId(), INCORRECT_INPUT_MESSAGE_TEXT, absSender);
                 return;
             }
