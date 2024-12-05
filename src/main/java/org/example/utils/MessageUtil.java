@@ -22,7 +22,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 public class MessageUtil {
     private static final String EXCEPTION_MESSAGE_TEMPLATE = "Для ID чата {} не удалось отправить сообщение. Причина: {}";
     private static final String EXCEPTION_MESSAGE_DOWNLOAD_FILE = "Не удалось скачать файл. Причина: {}";
-    private static final String FILE_STORAGE_PATH = "src/main/resources/static/";
+    private static final String FILE_STORAGE_PATH = "/root/volunteersBot/src/main/resources/static/";
 
     public static Message sendMessageText(long chatId, String text, AbsSender sender) {
         return MessageUtil.sendMessage(
