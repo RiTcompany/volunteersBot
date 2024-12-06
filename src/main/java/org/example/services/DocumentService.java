@@ -20,4 +20,6 @@ public interface DocumentService {
     void setModerator(DocumentToCheck documentToCheck, long botUserId);
 
     boolean mayChangeDocument(long chatId, EDocument eDocument);
+
+    boolean hasCheckedDocument(long chatId, EDocument eDocument);
 }

@@ -67,6 +67,9 @@ public class Event {
     @Column(name = "results_link")
     private String resultsLink;
 
+    @Column(name = "is_available_for_registration")
+    private Boolean isAvailable;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

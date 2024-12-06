@@ -33,4 +33,8 @@ public interface DocumentRepository extends JpaRepository<DocumentToCheck, Long>
     Optional<DocumentToCheck> findFirstByChatIdAndDocumentTypeAndStatus(
             long chatId, EDocument eDocument, ECheckStatus status
     );
+
+    boolean existsByChatIdAndDocumentTypeAndStatus(
+            long chatId, EDocument eDocument, ECheckStatus eCheckStatus
+    );
 }

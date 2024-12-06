@@ -24,7 +24,12 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    public Event getAvailableById(Long eventId) {
+        return eventRepository.findByIdAndIsAvailableTrue(eventId);
+    }
+
+    @Override
     public List<Event> getFutureAll() {
-        return eventRepository.findAllByStartTimeAfterToday();
+        return eventRepository.findAllByStartTimeAfterTodayAndIsAvailableTrue();
     }
 }

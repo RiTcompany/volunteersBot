@@ -12,5 +12,7 @@ public interface EventService {
 
     Event getById(Long eventId);
 
+    Event getAvailableById(Long eventId);
+
     List<Event> getFutureAll();
 }

@@ -3,12 +3,15 @@ package org.example.commands.register;
 import org.example.entities.Event;
 import org.example.entities.Volunteer;
 import org.example.enums.EColor;
+import org.example.enums.EDocument;
 import org.example.exceptions.EntityNotFoundException;
+import org.example.services.DocumentService;
 import org.example.services.EventEducationMessageService;
 import org.example.services.EventService;
 import org.example.services.QrCodeService;
 import org.example.services.TrainingService;
 import org.example.services.VolunteerService;
+import org.example.utils.DateUtil;
 import org.example.utils.MessageUtil;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.extensions.bots.commandbot.commands.BotCommand;
@@ -27,8 +30,11 @@ public class RegisterToEventCommand extends BotCommand {
     private final QrCodeService qrCodeService;
     private final EventEducationMessageService eventEducationMessageService;
     private final TrainingService trainingService;
+    private final DocumentService documentService;
     private static final String PHOTO_EXCEPTION_MESSAGE_TEXT = "Возникли проблемы с формированием вашего QR кода. Пожалуйста обратитесь в поддержку";
     private static final String NOT_REGISTERED_MESSAGE_TEXT = "Сначала вам необходимо стать волонтёром. Используйте команду /volunteer_register";
+    private static final String PHOTO_NOT_CHECKED_ANSWER = "Ваша фотография ещё не проверена. Пока что вы не можете принять участие в мероприятии";
+    private static final String CHILD_DOC_NOT_CHECKED_ANSWER = "Ваш документ от родителей ещё не проверен. Пока что вы не можете принять участие в мероприятии";
     private static final String INCORRECT_INPUT_MESSAGE_TEXT = """
             Неверный ввод. Пожалуйста введите команду, а затем номер мероприятия через пробел.
             Список мероприятий и их номеров вы можете получить по команде /event_list.
@@ -40,7 +46,8 @@ public class RegisterToEventCommand extends BotCommand {
             VolunteerService volunteerService,
             QrCodeService qrCodeService,
             EventEducationMessageService eventEducationMessageService,
-            TrainingService trainingService
+            TrainingService trainingService,
+            DocumentService documentService
     ) {
         super("register_event", "Register to event");
         this.eventService = eventService;
@@ -48,6 +55,7 @@ public class RegisterToEventCommand extends BotCommand {
         this.qrCodeService = qrCodeService;
         this.eventEducationMessageService = eventEducationMessageService;
         this.trainingService = trainingService;
+        this.documentService = documentService;
     }
 
     @Override
@@ -79,14 +87,27 @@ public class RegisterToEventCommand extends BotCommand {
         if (event == null) {
             MessageUtil.sendMessageText(volunteer.getChatId(), INCORRECT_INPUT_MESSAGE_TEXT, absSender);
         } else {
-            if (!trainingService.getResultByEmail(eventId, volunteer.getEmail())) {
+            if (!hasCheckedPhoto(volunteer)) {
+                MessageUtil.sendMessageText(volunteer.getChatId(), PHOTO_NOT_CHECKED_ANSWER, absSender);
+            } else if (!hasAgeApprove(volunteer)) {
+                MessageUtil.sendMessageText(volunteer.getChatId(), CHILD_DOC_NOT_CHECKED_ANSWER, absSender);
+            } else if (!trainingService.getResultByEmail(eventId, volunteer.getEmail())) {
                 sendEducation(eventId, volunteer.getChatId(), absSender);
             } else {
-//                registerUserToEvent(volunteer, event);
+                registerUserToEvent(volunteer, event);
                 sendQrCode(volunteer, eventId, absSender);
                 MessageUtil.sendMessageText(volunteer.getChatId(), ANSWER, absSender);
             }
         }
+    }
+
+    private boolean hasCheckedPhoto(Volunteer volunteer) {
+        return documentService.hasCheckedDocument(volunteer.getChatId(), EDocument.VOLUNTEER_PHOTO);
+    }
+
+    private boolean hasAgeApprove(Volunteer volunteer) {
+        return DateUtil.getYearCountByDate(volunteer.getBirthday()) >= 18 ||
+                documentService.hasCheckedDocument(volunteer.getChatId(), EDocument.CHILD_DOCUMENT);
     }
 
     private void registerUserToEvent(Volunteer volunteer, Event event) {

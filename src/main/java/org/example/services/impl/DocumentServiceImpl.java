@@ -67,4 +67,9 @@ public class DocumentServiceImpl implements DocumentService {
     public boolean mayChangeDocument(long chatId, EDocument eDocument) {
         return documentRepository.isNotExistByChatIdAndDocumentTypeAndNotFinishedStatus(chatId, eDocument);
     }
+
+    @Override
+    public boolean hasCheckedDocument(long chatId, EDocument eDocument) {
+        return documentRepository.existsByChatIdAndDocumentTypeAndStatus(chatId, eDocument, ECheckStatus.ACCEPTED);
+    }
 }
