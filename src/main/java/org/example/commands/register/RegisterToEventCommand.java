@@ -84,7 +84,7 @@ public class RegisterToEventCommand extends BotCommand {
 
     private void registerToEvent(Volunteer volunteer, long eventId, AbsSender absSender) throws GeneralSecurityException, IOException {
         Event event = eventService.getById(eventId);
-        if (event == null) {
+        if (event == null || !event.getIsAvailable()) {
             MessageUtil.sendMessageText(volunteer.getChatId(), INCORRECT_INPUT_MESSAGE_TEXT, absSender);
         } else {
             if (!hasCheckedPhoto(volunteer)) {
