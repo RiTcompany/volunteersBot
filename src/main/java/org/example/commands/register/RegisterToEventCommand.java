@@ -22,6 +22,7 @@ import org.telegram.telegrambots.meta.bots.AbsSender;
 import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.Date;
 
 @Component
 public class RegisterToEventCommand extends BotCommand {
@@ -84,7 +85,7 @@ public class RegisterToEventCommand extends BotCommand {
 
     private void registerToEvent(Volunteer volunteer, long eventId, AbsSender absSender) throws GeneralSecurityException, IOException {
         Event event = eventService.getById(eventId);
-        if (event == null || !event.getIsAvailable()) {
+        if (event == null || !event.getIsAvailable() || !event.getStartTime().before(new Date())) {
             MessageUtil.sendMessageText(volunteer.getChatId(), INCORRECT_INPUT_MESSAGE_TEXT, absSender);
         } else {
             if (!hasCheckedPhoto(volunteer)) {
