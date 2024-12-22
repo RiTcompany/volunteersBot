@@ -21,6 +21,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,6 +29,8 @@ import java.util.regex.Pattern;
 @Service
 @RequiredArgsConstructor
 public class TrainingServiceImpl implements TrainingService {
+    private static final Integer TRAIN_LINK_MESSAGE_NUMBER = 1000;
+
     private final EventRepository eventRepository;
     private final EventEducationMessageRepository eventEducationMessageRepository;
     private final VolunteerEventRepository volunteerEventRepository;
@@ -38,10 +41,21 @@ public class TrainingServiceImpl implements TrainingService {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new EventNotFoundException(eventId.toString()));
         event.setTrainingLink(trainingLink);
-//        eventEducationMessageRepository.count();
-        eventEducationMessageRepository.save(
-                new EventEducationMessage(eventId, 6, event.getTrainingLink(), EMessage.TEXT));
-        return eventRepository.save(event);
+
+        Optional<EventEducationMessage> eventEducationMessageOpt =
+                eventEducationMessageRepository.findByEventIdAndMessageNumber(eventId, TRAIN_LINK_MESSAGE_NUMBER);
+        EventEducationMessage eventEducationMessage;
+        if (eventEducationMessageOpt.isEmpty()) {
+            eventEducationMessage = new EventEducationMessage(
+                    eventId, TRAIN_LINK_MESSAGE_NUMBER, event.getTrainingLink(), EMessage.TEXT
+            );
+        } else {
+            eventEducationMessage = eventEducationMessageOpt.get();
+            eventEducationMessage.setData(trainingLink);
+        }
+
+        eventEducationMessageRepository.saveAndFlush(eventEducationMessage);
+        return eventRepository.saveAndFlush(event);
     }
 
     @Override
@@ -63,19 +77,7 @@ public class TrainingServiceImpl implements TrainingService {
             String spreadsheetUrl = eventRepository.findEventResultsLinkById(eventId);
 
             String spreadsheetId = extractSpreadsheetId(spreadsheetUrl);
-            if (spreadsheetId == null) {
-                throw new IllegalArgumentException("Invalid Google Sheets URL.");
-            }
-
-            String range = "Sheet1!B1:C";
-
-            String url = String.format(
-                    "https://sheets.googleapis.com/v4/spreadsheets/%s/values/%s?key=AIzaSyDfzw8ubHYAvVKDL5MK6VObX9Kq3eZdO80",
-                    spreadsheetId, range
-            );
-
-            HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
-            connection.setRequestMethod("GET");
+            HttpURLConnection connection = getHttpURLConnection(spreadsheetId);
 
             int responseCode = connection.getResponseCode();
             if (responseCode != HttpURLConnection.HTTP_OK) {
@@ -102,12 +104,28 @@ public class TrainingServiceImpl implements TrainingService {
                 }
             }
 
-
             log.info("Email not found in the sheet.");
             return false;
         } else {
             return true;
         }
+    }
+
+    private static HttpURLConnection getHttpURLConnection(String spreadsheetId) throws IOException {
+        if (spreadsheetId == null) {
+            throw new IllegalArgumentException("Invalid Google Sheets URL.");
+        }
+
+        String range = "Sheet1!B1:C";
+
+        String url = String.format(
+                "https://sheets.googleapis.com/v4/spreadsheets/%s/values/%s?key=AIzaSyDfzw8ubHYAvVKDL5MK6VObX9Kq3eZdO80",
+                spreadsheetId, range
+        );
+
+        HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+        connection.setRequestMethod("GET");
+        return connection;
     }
 
     private String extractSpreadsheetId(String url) {
