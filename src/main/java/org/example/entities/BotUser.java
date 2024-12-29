@@ -44,6 +44,9 @@ public class BotUser {
     )
     private List<Role> roleList;
 
+    @ManyToMany
+    private List<Event> LeadingEventList;
+
     public BotUser(Long tgId) {
         this.tgId = tgId;
         this.roleList = new ArrayList<>();
