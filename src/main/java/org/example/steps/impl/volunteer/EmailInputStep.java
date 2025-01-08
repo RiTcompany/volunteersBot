@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 public class EmailInputStep extends InputStep {
     private final VolunteerService volunteerService;
     private static final String PREPARE_MESSAGE_TEXT = "Введите ваш <b>Email</b>:";
-    private static final Pattern pattern = Pattern.compile("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$");
+    private static final Pattern pattern = Pattern.compile("^[A-Za-z0-9._%+-]+@gmail\\.com$");
 
     @Override
     public void prepare(ChatHash chatHash, AbsSender sender) throws EntityNotFoundException {
