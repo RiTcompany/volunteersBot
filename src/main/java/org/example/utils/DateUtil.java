@@ -11,7 +11,9 @@ public class DateUtil {
 
     public static Date convertDate(String birthdayStr) {
         try {
-            return DATE_FORMAT.parse(birthdayStr);
+            Date date = DATE_FORMAT.parse(birthdayStr);
+            String dateStr = DATE_FORMAT.format(date);
+            if (dateStr.equals(birthdayStr)) return date;
         } catch (ParseException ignored) {
         }
 
