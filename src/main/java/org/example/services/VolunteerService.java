@@ -16,6 +16,8 @@ import java.util.List;
 public interface VolunteerService {
     boolean existsByChatId(long chatId);
 
+    boolean existsByEmail(String email);
+
     Volunteer getByChatId(long chatId) throws EntityNotFoundException;
 
     Volunteer getById(Long id);

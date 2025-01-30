@@ -32,6 +32,10 @@ public class EmailInputStep extends InputStep {
             return new ResultDto(false, "Некорректный email. Попробуйте другой");
         }
 
+        if (volunteerService.existsByEmail(data)) {
+            return new ResultDto(false, "Такой email уже существует. Попробуйте другой");
+        }
+
         return new ResultDto(true);
     }
 

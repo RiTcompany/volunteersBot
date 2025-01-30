@@ -31,6 +31,11 @@ public class VolunteerServiceImpl implements VolunteerService {
     }
 
     @Override
+    public boolean existsByEmail(String email) {
+        return volunteerRepository.existsByEmail(email);
+    }
+
+    @Override
     public Volunteer getByChatId(long chatId) throws EntityNotFoundException {
         return volunteerRepository.findByChatId(chatId)
                 .orElseThrow(() -> new EntityNotFoundException(
